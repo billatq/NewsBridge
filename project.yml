@@ -1,0 +1,100 @@
+name: NewsBridge
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    CLANG_ENABLE_MODULES: YES
+    CLANG_ENABLE_OBJC_ARC: YES
+    CODE_SIGN_STYLE: Automatic
+    CURRENT_PROJECT_VERSION: 13
+    DEVELOPMENT_TEAM: XXXXXXXXXX
+    MARKETING_VERSION: 1.0
+    TARGETED_DEVICE_FAMILY: "1,2"
+targets:
+  NewsBridge:
+    type: application
+    platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.NewsBridge
+    sources:
+      - path: NewsBridge
+    info:
+      path: NewsBridge/Info.plist
+      properties:
+        CFBundleDisplayName: News Share
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    dependencies:
+      - target: ShareExtension
+        embed: true
+      - target: ActionExtension
+        embed: true
+  ShareExtension:
+    type: app-extension
+    platform: iOS
+    productName: ShareExtension
+    sources:
+      - path: ShareExtension
+        excludes:
+          - "*.plist"
+          - ExtensionAssets.xcassets
+      - path: NewsBridge/Assets.xcassets
+    settings:
+      base:
+        APPLICATION_EXTENSION_API_ONLY: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.NewsBridge.ShareExtension
+        SKIP_INSTALL: YES
+    info:
+      path: ShareExtension/Share-Info.plist
+      properties:
+        CFBundleDisplayName: Open in News
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationDictionaryVersion: 2
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+  ActionExtension:
+    type: app-extension
+    platform: iOS
+    productName: ActionExtension
+    sources:
+      - path: ShareExtension
+        excludes:
+          - "*.plist"
+    settings:
+      base:
+        APPLICATION_EXTENSION_API_ONLY: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: ExtensionIcon
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.NewsBridge.OpenInNewsAction
+        SKIP_INSTALL: YES
+    info:
+      path: ShareExtension/Action-Info.plist
+      properties:
+        CFBundleDisplayName: Open in News
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ui-services
+          NSExtensionPrincipalClass: ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationDictionaryVersion: 2
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
